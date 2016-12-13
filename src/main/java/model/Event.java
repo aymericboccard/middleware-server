@@ -70,7 +70,7 @@ public class Event implements Serializable {
 
 	@Override
 	public String toString() {
-		return "\nEvent [ArtistName=" + artistName + ", date=" + date + ", category=" + category + "]";
+		return "\nEvent [Id=" +idevent+ ", artistName=" + artistName + ", date=" + date + ", category=" + category + "]";
 	}
 
 	@Override

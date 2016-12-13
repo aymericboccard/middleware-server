@@ -41,6 +41,7 @@
 package theatre.service;
 
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -65,7 +66,6 @@ import model.Booking;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class StatelessSessionBean implements StatelessLocal {
 
-	// private static final char A = 'A';
 	@Resource
 	private EJBContext context;
 	@PersistenceContext(type = PersistenceContextType.TRANSACTION)
@@ -130,6 +130,22 @@ public class StatelessSessionBean implements StatelessLocal {
 	}
 	
 	@Override
+	public String showBookedSeatsByEventInSection(int idevent, String section) {
+		
+		if(section.equals("A") || section.equals("B") || section.equals("C") || section.equals("D")){
+			
+			Query query = em.createNamedQuery("Booking.getBookedSeatsByEventIn".concat(section));
+			query.setParameter("idEvent", idevent);
+			List<String> result = (List<String>) query.getResultList();
+			
+			return result.isEmpty() ? "Aucun siège réservé pour cette section" : result.toString();
+			
+		}else{
+			return "La section "+section+ " n'existe pas";
+		}
+	}
+	
+	@Override
 	public String showPricesByEvent(int idevent){
 		try{
 			Query query = em.createNamedQuery("Event.getCategory");
@@ -159,46 +175,63 @@ public class StatelessSessionBean implements StatelessLocal {
 	}
 
 	@Override
-	public String addBooking(int idevent, String seat, String username, String cardNumber, String cardHolderName)
-			throws Exception {
+	public boolean addBooking(int idevent, String seat, String username, String cardNumber, String cardHolderName) {
 		try {
-			if (checkAvailability(idevent)) {
+	
+			MyBank bnp = new MyBank();
 
-				if (checkAvailabilityBySection(idevent, seat)) {
-					if (checkReservation(idevent, seat)) {
+			if (bnp.checkCardValidity(new BankClient(new BigInteger(cardNumber), cardHolderName))) {
+				UserTransaction utx = context.getUserTransaction();
 
-						MyBank bnp = new MyBank();
+				utx.begin();
 
-						if (bnp.checkCardValidity(new BankClient(new BigInteger(cardNumber), cardHolderName))) {
-							UserTransaction utx = context.getUserTransaction();
+				Booking booking = new Booking();
+				booking.setIdEvent(idevent);
+				booking.setSeat(seat);
+				booking.setUserName(username);
 
-							utx.begin();
-
-							Booking booking = new Booking();
-							booking.setIdEvent(idevent);
-							booking.setSeat(seat);
-							booking.setUserName(username);
-
-							em.persist(booking);
-							utx.commit();
-							return booking.toString();
-						} else {
-							return "card not valid";
-						}
-
-					} else {
-						return "seat already reserved";
-					}
-				} else {
-					return "tickets sold out,try other sections";
-				}
-			} else {
-				return "all tickets for all sections sold out, maybe next time!";
+				em.persist(booking);
+				utx.commit();
+				return true;
+			}else{
+				return false;
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-			return e.getLocalizedMessage();
+			return false;
+		}
+	}
+	
+	@Override
+	public float getPriceForSeat(int idevent, String section) {
+		
+		if(section.equals("A") || section.equals("B") || section.equals("C") || section.equals("D")){
+			
+			HashMap<String, Float> prices = null;
+			prices.put("C1", (float) 5);
+			prices.put("C2", (float) 10);
+			prices.put("C3", (float) 20);
+			prices.put("C4", (float) 50);
+			
+			HashMap<String, Float> coef = null;
+			coef.put("A", (float) 3);
+			coef.put("B", (float) 2.5);
+			coef.put("C", (float) 2);
+			coef.put("D", (float) 1);
+			
+			Query query = em.createNamedQuery("Event.getEventById");
+			query.setParameter("idevent", idevent);
+			Event result = (Event) query.getSingleResult();
+			
+			if(result == null){
+				return -1;
+			}else{
+				return prices.get(result.getCategory())*coef.get(section);
+			}
+			
+		}else{
+			return -1;
 		}
 	}
 

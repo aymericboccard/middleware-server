@@ -21,7 +21,11 @@ import javax.persistence.*;
 	@NamedQuery(name = "Booking.getBookingByEventandsectionA",query = "SELECT COUNT(b.seat) FROM Booking b WHERE b.idEvent = :idEvent AND b.seat LIKE 'A%'"),
 	@NamedQuery(name = "Booking.getBookingByEventandsectionB",query = "SELECT COUNT(b.seat) FROM Booking b WHERE b.idEvent = :idEvent AND b.seat LIKE 'B%'"),
 	@NamedQuery(name = "Booking.getBookingByEventandsectionC",query = "SELECT COUNT(b.seat) FROM Booking b WHERE b.idEvent = :idEvent AND b.seat LIKE 'C%'"),
-	@NamedQuery(name = "Booking.getBookingByEventandsectionD",query = "SELECT COUNT(b.seat) FROM Booking b WHERE b.idEvent = :idEvent AND b.seat LIKE 'D%'")
+	@NamedQuery(name = "Booking.getBookingByEventandsectionD",query = "SELECT COUNT(b.seat) FROM Booking b WHERE b.idEvent = :idEvent AND b.seat LIKE 'D%'"),
+	@NamedQuery(name = "Booking.getBookedSeatsByEventInA",query = "SELECT b.seat FROM Booking b WHERE b.idEvent = :idEvent AND b.seat LIKE 'A%' ORDER BY b.seat"),
+	@NamedQuery(name = "Booking.getBookedSeatsByEventInB",query = "SELECT b.seat FROM Booking b WHERE b.idEvent = :idEvent AND b.seat LIKE 'B%' ORDER BY b.seat"),
+	@NamedQuery(name = "Booking.getBookedSeatsByEventInC",query = "SELECT b.seat FROM Booking b WHERE b.idEvent = :idEvent AND b.seat LIKE 'C%' ORDER BY b.seat"),
+	@NamedQuery(name = "Booking.getBookedSeatsByEventInD",query = "SELECT b.seat FROM Booking b WHERE b.idEvent = :idEvent AND b.seat LIKE 'D%' ORDER BY b.seat")
 })
 
 public class Booking implements Serializable {

@@ -54,11 +54,22 @@ public class TheatreService {
 			return "Event Not Found or Name Incorrect";
 		}
 	}
+	
+	@WebMethod
+	public String showBookedSeatsByEventInSection(@WebParam(name = "idevent") int idevent, @WebParam(name = "section") String section){
+		try {
+			return metier.showBookedSeatsByEventInSection(idevent, section);
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			return "Event Not Found or Section Not Found";
+		}
+	}
 
 	@WebMethod
 	public String addBooking(@WebParam(name = "idevent") int idevent,@WebParam(name = "seat") String seat,@WebParam(name = "username") String username, @WebParam(name = "cardnumber") String cardNumber,@WebParam(name = "cardholdername") String cardHolderName){
 		try {
-			return metier.addBooking(idevent,seat,username,cardNumber,cardHolderName);
+			metier.addBooking(idevent,seat,username,cardNumber,cardHolderName);
+			return "ok";
 		} catch (Exception e) {
 			return e.getMessage();
 		}
