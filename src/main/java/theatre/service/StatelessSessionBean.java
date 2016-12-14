@@ -208,13 +208,13 @@ public class StatelessSessionBean implements StatelessLocal {
 		
 		if(section.equals("A") || section.equals("B") || section.equals("C") || section.equals("D")){
 			
-			HashMap<String, Float> prices = null;
+			HashMap<String, Float> prices = new HashMap<String, Float>();
 			prices.put("C1", (float) 5);
 			prices.put("C2", (float) 10);
 			prices.put("C3", (float) 20);
 			prices.put("C4", (float) 50);
 			
-			HashMap<String, Float> coef = null;
+			HashMap<String, Float> coef = new HashMap<String, Float>();
 			coef.put("A", (float) 3);
 			coef.put("B", (float) 2.5);
 			coef.put("C", (float) 2);
