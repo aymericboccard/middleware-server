@@ -1,3 +1,5 @@
+/*lien avec la table de réservation*/
+
 package model;
 
 import java.io.Serializable;

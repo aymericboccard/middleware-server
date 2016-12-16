@@ -1,3 +1,5 @@
+/* gère la simulation de paiement */
+
 package model;
 
 import java.math.BigInteger;

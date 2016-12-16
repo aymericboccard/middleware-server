@@ -71,7 +71,7 @@ public class StatelessSessionBean implements StatelessLocal {
 	@PersistenceContext(type = PersistenceContextType.TRANSACTION)
 	private EntityManager em;
 
-	// pour tester le fonctionnement de la table EVENTS
+	// montre tous les événements
 	@SuppressWarnings("unchecked")
 	@Override
 	public String showAllEvents() {
@@ -82,7 +82,7 @@ public class StatelessSessionBean implements StatelessLocal {
 		return events.toString();
 	}
 
-	// pour tester le fonctionnement de la table EVENTS
+	// montre l'événement associé à un id
 	@Override
 	public String showEventById(int idevent) {
 		Query query = em.createNamedQuery("Event.getEventById");
@@ -91,6 +91,7 @@ public class StatelessSessionBean implements StatelessLocal {
 		return event.toString();
 	}
 	
+	// montre les sièges réservés
 	@Override
 	public String showBookedSeats(int idevent) {
 		Query query = em.createNamedQuery("Booking.getBookingSeats");
@@ -98,7 +99,8 @@ public class StatelessSessionBean implements StatelessLocal {
 		List<String> seats = (List<String>) query.getResultList();
 		return seats.toString();
 	}
-
+	
+	// montre les événements d'un artiste donné
 	@Override
 	public String showEventByName(String artistName) {
 		Query query = em.createNamedQuery("Event.getEventByName");
@@ -107,6 +109,7 @@ public class StatelessSessionBean implements StatelessLocal {
 		return events.toString();
 	}
 	
+	//montre les événements qu'on a réservés
 	@Override
 	public String showBookedEvent(String userName) {
 		Query query1 = em.createQuery("SELECT e.artistName FROM Booking b, Event e WHERE b.userName = :userName AND b.idEvent = e.idevent");
@@ -129,6 +132,7 @@ public class StatelessSessionBean implements StatelessLocal {
 		return result.isEmpty() ? "You have no reservation with this name" : result;
 	}
 	
+	//montre les sièges reservés pour une section et un événements donnés
 	@Override
 	public String showBookedSeatsByEventInSection(int idevent, String section) {
 		
@@ -145,6 +149,7 @@ public class StatelessSessionBean implements StatelessLocal {
 		}
 	}
 	
+	//montre le prix des événements
 	@Override
 	public String showPricesByEvent(int idevent){
 		try{
@@ -155,16 +160,16 @@ public class StatelessSessionBean implements StatelessLocal {
 			String result = "";
 			switch(category){
 			case "C1":
-				result = "Sector A: 15,00€ \nSector B: 12,50€ \nSector C: 10,00€ \n Sector D: 5,00€";
+				result = "Sector A: 15,00€ \nSector B: 12,50€ \nSector C: 10,00€ \nSector D: 5,00€";
 				break;
 			case "C2":
-				result = "Sector A: 30,00€ \nSector B: 25,00€ \nSector C: 20,00€ \n Sector D: 10,00€";
+				result = "Sector A: 30,00€ \nSector B: 25,00€ \nSector C: 20,00€ \nSector D: 10,00€";
 				break;
 			case "C3":
-				result = "Sector A: 60,00€ \nSector B: 50,00€ \nSector C: 40,00€ \n Sector D: 20,00€";
+				result = "Sector A: 60,00€ \nSector B: 50,00€ \nSector C: 40,00€ \nSector D: 20,00€";
 				break;
 			case "C4":
-				result = "Sector A: 150,00€ \nSector B: 125,00€ \nSector C: 100,00€ \n Sector D: 50,00€";
+				result = "Sector A: 150,00€ \nSector B: 125,00€ \nSector C: 100,00€ \nSector D: 50,00€";
 				break;
 			}
 			
@@ -173,7 +178,8 @@ public class StatelessSessionBean implements StatelessLocal {
 			return e.getMessage();
 		}
 	}
-
+	
+	//ajout d'une réservation à la base de données et paiement
 	@Override
 	public boolean addBooking(int idevent, String seat, String username, String cardNumber, String cardHolderName) {
 		try {
@@ -203,6 +209,7 @@ public class StatelessSessionBean implements StatelessLocal {
 		}
 	}
 	
+	//tetourne le prix associé à un siège
 	@Override
 	public float getPriceForSeat(int idevent, String section) {
 		
@@ -235,7 +242,6 @@ public class StatelessSessionBean implements StatelessLocal {
 		}
 	}
 
-	// pour tester le fonctionnement de la table BOOKING
 	@Override
 	public String showBookingBySeat(String seat) {
 
@@ -251,6 +257,7 @@ public class StatelessSessionBean implements StatelessLocal {
 		}
 	};
 
+	//vérifie si un siège est réservé
 	public boolean checkReservation(int idevent, String seat) throws Exception {
 
 		try {
@@ -269,7 +276,8 @@ public class StatelessSessionBean implements StatelessLocal {
 			return false;
 		}
 	}
-
+	
+	//vérifie si un événement est complet
 	public boolean checkAvailability(int idevent) throws Exception {
 		try {
 
@@ -297,7 +305,8 @@ public class StatelessSessionBean implements StatelessLocal {
 		}
 
 	}
-
+	
+	//vérifie si une section est complète
 	public boolean checkAvailabilityBySection(int idevent, String section) throws Exception {
 		try {
 

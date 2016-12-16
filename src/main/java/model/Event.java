@@ -1,3 +1,5 @@
+/*lien avec la table des événements */
+
 package model;
 
 import java.io.Serializable;

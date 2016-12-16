@@ -1,12 +1,6 @@
 package theatre.service;
 
 import javax.ejb.Remote;
-import javax.jws.WebParam;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
 
 @Remote
 public interface StatelessLocal {
